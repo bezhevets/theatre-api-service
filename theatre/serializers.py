@@ -55,6 +55,12 @@ class PlayDetailSerializer(PlaySerializer):
         )
 
 
+class PlayImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Play
+        fields = ("id", "image")
+
+
 class PerformanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Performance
