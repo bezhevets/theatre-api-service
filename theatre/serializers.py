@@ -43,6 +43,17 @@ class PlayDetailSerializer(PlaySerializer):
         read_only=True
     )
 
+    class Meta:
+        model = Play
+        fields = (
+            "id",
+            "title",
+            "description",
+            "actors",
+            "genres",
+            "image"
+        )
+
 
 class PerformanceSerializer(serializers.ModelSerializer):
     class Meta:
