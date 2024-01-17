@@ -144,5 +144,8 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 15,
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
-    ]
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "theatre.permissions.IsAdminOrIfAuthenticatedReadOnly",
+    ],
 }
