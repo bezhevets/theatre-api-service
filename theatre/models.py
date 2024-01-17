@@ -63,7 +63,7 @@ class Performance(models.Model):
     theatre_hall = models.ForeignKey(TheatreHall, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ["-show_time"]
+        ordering = ["show_time"]
 
     def __str__(self) -> str:
         return self.play.title + " " + str(self.show_time)
