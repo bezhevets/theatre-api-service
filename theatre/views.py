@@ -10,6 +10,7 @@ from theatre.models import (
     Play,
     Performance,
 )
+from theatre.permissions import AnonReadOnly
 from theatre.serializers import (
     TheatreHallSerializers,
     GenreSerializer,
@@ -18,7 +19,7 @@ from theatre.serializers import (
     PlayListSerializer,
     PlayDetailSerializer,
     PlayImageSerializer,
-    PerformanceSerializer,
+    PerformanceSerializer, PerformanceListSerializer, PerformanceDetailSerializer,
 )
 
 
@@ -115,3 +116,11 @@ class PlayViewSet(
 class PerformanceViewSet(viewsets.ModelViewSet):
     queryset = Performance.objects.all()
     serializer_class = PerformanceSerializer
+    permission_classes = (AnonReadOnly, )
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return PerformanceListSerializer
+        if self.action == "retrieve":
+            return PerformanceDetailSerializer
+        return PerformanceSerializer
