@@ -31,3 +31,16 @@ class Actor(models.Model):
     @property
     def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
+
+
+class Play(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    actors = models.ManyToManyField(Actor)
+    genres = models.ManyToManyField(Genre)
+
+    class Meta:
+        ordering = ("title", )
+
+    def __str__(self) -> str :
+        return self.title
