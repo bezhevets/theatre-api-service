@@ -27,7 +27,13 @@ class ActorViewSet(
     serializer_class = ActorSerializer
 
 
-class TheatreHallViewSet(viewsets.ModelViewSet):
+class TheatreHallViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    GenericViewSet,
+):
     queryset = TheatreHall.objects.all()
     serializer_class = TheatreHallSerializers
 
