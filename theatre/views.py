@@ -5,7 +5,7 @@ from theatre.models import TheatreHall, Genre, Actor, Play
 from theatre.serializers import (
     TheatreHallSerializers,
     GenreSerializer,
-    ActorSerializer, PlaySerializer, PlayListSerializer,
+    ActorSerializer, PlaySerializer, PlayListSerializer, PlayDetailSerializer,
 )
 
 
@@ -47,4 +47,6 @@ class PlayViewSet(
     def get_serializer_class(self):
         if self.action == "list":
             return PlayListSerializer
+        if self.action == "retrieve":
+            return PlayDetailSerializer
         return PlaySerializer
