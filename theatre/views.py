@@ -114,7 +114,7 @@ class PlayViewSet(
 
 
 class PerformanceViewSet(viewsets.ModelViewSet):
-    queryset = Performance.objects.all()
+    queryset = Performance.objects.all().select_related("play", "theatre_hall")
     serializer_class = PerformanceSerializer
     permission_classes = (AnonReadOnly, )
 
