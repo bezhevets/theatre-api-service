@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -64,7 +66,7 @@ class PlayViewSet(
         return [int(param) for param in params_in_url.split(",")]
 
     def get_queryset(self):
-        """Retrieve the movies with filters"""
+        """Retrieve the plays with filters"""
         title = self.request.query_params.get("title")
         genres = self.request.query_params.get("genres")
         actors = self.request.query_params.get("actors")
@@ -114,13 +116,34 @@ class PlayViewSet(
 
 
 class PerformanceViewSet(viewsets.ModelViewSet):
-    queryset = Performance.objects.all().select_related("play", "theatre_hall")
+    queryset = (
+        Performance.objects.all()
+        .select_related("play", "theatre_hall")
+    )
     serializer_class = PerformanceSerializer
     permission_classes = (AnonReadOnly, )
+
+    def get_queryset(self):
+        """Retrieve the performances with filters"""
+        date = self.request.query_params.get("data")
+        play_id_str = self.request.query_params.get("play")
+
+        queryset = self.queryset
+
+        if date:
+            date = datetime.strptime(date, "%Y-%m-%d").date()
+            queryset = queryset.filter(show_time__date=date)
+
+        if play_id_str:
+            queryset = queryset.filter(play_id=int(play_id_str))
+
+        return queryset
 
     def get_serializer_class(self):
         if self.action == "list":
             return PerformanceListSerializer
+
         if self.action == "retrieve":
             return PerformanceDetailSerializer
+
         return PerformanceSerializer
