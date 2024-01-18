@@ -105,6 +105,16 @@ class PerformanceDetailSerializer(PerformanceSerializer):
 
 
 class TicketSerializer(serializers.ModelSerializer):
+    def validate(self, attrs):
+        data = super(TicketSerializer, self).validate(attrs=attrs)
+        Ticket.validate_ticket(
+            attrs["row"],
+            attrs["seat"],
+            attrs["performance"].theatre_hall,
+            ValidationError
+        )
+        return data
+
     class Meta:
         model = Ticket
         fields = ("id", "row", "seat", "performance")
@@ -126,7 +136,7 @@ class ReservationSerializer(serializers.ModelSerializer):
             tickets_data = validated_data.pop("tickets")
             order = Reservation.objects.create(**validated_data)
             for ticket_data in tickets_data:
-                Ticket.objects.create(order=order, **ticket_data)
+                Ticket.objects.create(reservation=order, **ticket_data)
             return order
 
 
