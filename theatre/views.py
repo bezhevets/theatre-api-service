@@ -11,6 +11,7 @@ from theatre.models import (
     Actor,
     Play,
     Performance,
+    Reservation,
 )
 from theatre.permissions import AnonReadOnly
 from theatre.serializers import (
@@ -21,7 +22,10 @@ from theatre.serializers import (
     PlayListSerializer,
     PlayDetailSerializer,
     PlayImageSerializer,
-    PerformanceSerializer, PerformanceListSerializer, PerformanceDetailSerializer,
+    PerformanceSerializer,
+    PerformanceListSerializer,
+    PerformanceDetailSerializer,
+    ReservationSerializer,
 )
 
 
@@ -147,3 +151,9 @@ class PerformanceViewSet(viewsets.ModelViewSet):
             return PerformanceDetailSerializer
 
         return PerformanceSerializer
+
+
+class ReservationViewSet(viewsets.ModelViewSet):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
+
