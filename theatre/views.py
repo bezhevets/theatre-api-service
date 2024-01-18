@@ -27,7 +27,8 @@ from theatre.serializers import (
     PerformanceSerializer,
     PerformanceListSerializer,
     PerformanceDetailSerializer,
-    ReservationSerializer, ReservationListSerializer,
+    ReservationSerializer,
+    ReservationListSerializer,
 )
 
 
