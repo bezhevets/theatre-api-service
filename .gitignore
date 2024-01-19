@@ -5,3 +5,5 @@ venv
 db.sqlite3
 media
 .flake8
+theatre.json
+user.json

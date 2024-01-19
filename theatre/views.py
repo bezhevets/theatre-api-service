@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.db.models import F, Count
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -124,13 +125,39 @@ class PlayViewSet(
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "title",
+                type=str,
+                description="Filter by title",
+                required=False,
+            ),
+            OpenApiParameter(
+                "genres",
+                type={"type": "list", "items": {"type": "number"}},
+                description="Filter by genre",
+                required=False,
+            ),
+            OpenApiParameter(
+                "actors",
+                type={"type": "list", "items": {"type": "number"}},
+                description="Filter by actors",
+                required=False,
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
 class PerformanceViewSet(viewsets.ModelViewSet):
     queryset = (
         Performance.objects.all()
         .select_related("play", "theatre_hall")
         .annotate(tickets_available=(
-            F("theatre_hall__rows") * F("theatre_hall__seats_in_row") - Count("tickets")
+            F("theatre_hall__rows") * F("theatre_hall__seats_in_row")
+            - Count("tickets")
         ))
     )
     serializer_class = PerformanceSerializer
@@ -161,6 +188,25 @@ class PerformanceViewSet(viewsets.ModelViewSet):
 
         return PerformanceSerializer
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "date",
+                type=str,
+                description="Filter by date",
+                required=False,
+            ),
+            OpenApiParameter(
+                "play",
+                type=int,
+                description="Filter by genre",
+                required=False,
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
 class ReservationViewSet(
     mixins.ListModelMixin,
@@ -184,4 +230,3 @@ class ReservationViewSet(
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
